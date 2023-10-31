@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=AYOqp3mELxzbn4OXvEzqUmYPcfAIUHob_Ca9aB4n6yRhJQ-ZMzXtXRTbyAjLoiv2SkHeHwVjgX2mPjYF"></script>
+    <style>
+        /* Custom CSS for this page */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('../static/2.jpg');  /* URL to your background image */
+            background-size: cover;
+            /* Light gray background */
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px; /* Center the content vertically */
+            min-height: 100vh;
+        }
+        .container {
+
+            background-image: url('../static/5.jpg');  /* URL to your background image */
+            background-size: cover;;
+           
+ /* Reduce the max width */
+            text-align: center; /* Center content horizontally */
+        }
+    
+
+        header {
+            background-image: url('../static/5.jpg');  /* URL to your background image */
+            background-size: cover;
+            color: #0c0b0b;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+    
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #181717;
+        }
+
+        .course-card {
+            border: 1px solid #2b08ee;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            background-image: url('../static/3.jpeg');  /* URL to your background image */
+            background-size: cover;
+            position: relative;
+        }
+
+        .course-title {
+            font-weight: bold;
+            font-size: 28px;
+            cursor: pointer;
+            /* Make the title clickable */
+        }
+
+        .course-description {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .course-price {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .subscribe-button {
+            background-color: #e35f0e;
+            color: #141010;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .subscribe-button:hover {
+            background-color: #e5d066;
+        }
+
+        .student-courses {
+            display: none;
+        }
+
+        .student-course-title {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .student-course-link {
+            margin-top: 5px;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .footer {
+            background-image: url('../static/5.jpg');  /* URL to your background image */
+            background-size: cover;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Online Learning Platform</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                
+                <li><a href="{{ url_for('home') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Add a search bar to search for courses -->
+        <input type="text" class="search-bar" placeholder="Search for courses..." oninput="searchCourses(this.value)">
+    
+        <!-- Display available courses -->
+        <div class="course-card">
+            <div class="course-title">Web Development with HTML and CSS</div>
+            <div class="course-description">
+                Learn the fundamentals of web development with HTML and CSS. Create stunning web pages with this
+                beginner-friendly course.
+            </div>
+            <div class="course-price">
+                <span>$49.99</span>
+            </div>
+            <button class="btn btn-secondary subscribe-button" onclick="initiatePayPalPayment(1, 'Web Development with HTML and CSS', 49.99)">Subscribe</button>
+        </div>
+    
+        <!-- Repeat similar structure for other courses -->
+        <div class="course-card" data-course-id="2">
+            <div class="course-title" onclick="toggleCourseInfo(2)">JavaScript Programming</div>
+            <div class="course-description">
+                Dive into the world of JavaScript, the language of the web. Master front-end and back-end development with
+                this comprehensive course.
+            </div>
+            <div class="course-price">
+                <span>$69.99</span>
+            </div>
+            <button class="subscribe-button" onclick="redirect()">Subscribe</button>
+   
+        </div>
+    
+        <div class="course-card" data-course-id="3">
+            <div class="course-title" onclick="toggleCourseInfo(3)">Python Programming for Beginners</div>
+            <div class="course-description">
+                Start your coding journey with Python. Learn its simplicity and versatility. Perfect for beginners!
+            </div>
+            <div class="course-price">
+                <span>$39.99</span>
+            </div>
+            <button class="subscribe-button" onclick="redirect()">Subscribe</button>
+           
+
+        </div>
+    </div>
+    
+
+        <!-- Add more courses as needed -->
+
+        <!-- Display subscribed courses -->
+        <div class="student-courses" id="student-courses">
+            <div class="student-course-title">Subscribed Courses:</div>
+            <!-- Add subscribed course links dynamically -->
+        </div>
+    </div>
+
+
+   
+    <div class="footer">
+        &copy; 2023 DJ
+    </div>
+
+    <script>
+        // JavaScript code for the student dashboard
+        function toggleCourseInfo(courseId) {
+            const courseDescription = document.getElementById(`description-${courseId}`);
+            courseDescription.style.display = courseDescription.style.display === 'none' ? 'block' : 'none';
+        }
+
+
+        
+
+        function subscribeCourse(courseId) {
+            const courseCard = document.querySelector(`.course-card[data-course-id="${courseId}"]`);
+            if (courseCard) {
+                courseCard.style.display = 'none';
+
+                // Add the subscribed course link to the student's list of courses
+                const subscribedCourses = document.getElementById('student-courses');
+                const courseTitle = document.querySelector(`.course-card[data-course-id="${courseId}"] .course-title`);
+                const courseLink = document.createElement('a');
+                courseLink.href = '#'; // Add the actual course link here
+                courseLink.textContent = courseTitle.textContent;
+                courseLink.className = 'student-course-link';
+                subscribedCourses.appendChild(courseLink);
+            }
+        }
+
+        function searchCourses(query) {
+            const courseCards = document.querySelectorAll('.course-card');
+            for (const card of courseCards) {
+                const courseTitle = card.querySelector('.course-title');
+                if (courseTitle.textContent.toLowerCase().includes(query.toLowerCase())) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            }
+        }
+
+
+        function redirect() {
+            window.location.href = "http://127.0.0.1:5000/subscribe";
+           
+        }
+
+        
+
+    </script>
+</body>
+
+</html>

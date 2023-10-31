@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Subscribed Courses</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for this page */
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('../static/2.jpg');  /* URL to your background image */
+            background-size: cover;
+            /* Light gray background */
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px; /* Center the content vertically */
+            min-height: 100vh;
+        }
+        .container {
+            flex: 1;
+            margin-top: 20px;
+        }
+
+        header {
+            background-image: url('../static/1.jpg');  /* URL to your background image */
+            background-size: cover;
+            color: #0c0b0b;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #1a1818;
+        }
+
+        .course-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            background-image: url('../static/3.jpeg'); /* URL to your background image */
+            background-size: cover;
+            position: relative;
+        }
+
+        .course-title {
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer; /* Add pointer cursor for clickable title */
+        }
+
+        .course-description {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .course-price {
+            /* Add styling for the course price */
+            font-weight: bold;
+            color: #00d9ff;
+        }
+
+        .view-course-button {
+            background-color: #f7a415;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .view-course-button:hover {
+            background-color: #eeab0f;
+        }
+
+        /* Updated styling for course description */
+        .course-details {
+            display: none;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f7f7f7;
+        }
+
+        /* Updated styling for prerequisites */
+        .course-prerequisites {
+            display: none;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f7f7f7;
+        }
+
+        .footer {
+            background-image: url('../static/5.jpg');  /* URL to your background image */
+            background-size: cover;
+            color: #fff;
+            margin-top: 300px;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+          
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <h1>Subscribed Courses</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('student_dashboard') }}">Home</a></li>
+                <li><a href="{{ url_for('home') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Display subscribed course card for Web Development -->
+        <div class="course-card" data-course-id="web-dev">
+            <div class="course-title" onclick="toggleCourseContent('web-dev')">Web Development with HTML and CSS</div>
+            <button class="btn btn-primary view-course-button" onclick="toggleCourseContent('web-dev')">View Course</button>
+    
+            <!-- Additional content (initially hidden) -->
+            <div class="course-description">
+                <h3>Course Description</h3>
+                <p>This comprehensive course covers the following topics:</p>
+                <ul>
+                    <li>HTML fundamentals</li>
+                    <li>CSS styling and layout</li>
+                    <li>Creating responsive web pages</li>
+                    <li>Web development best practices</li>
+                </ul>
+            </div>
+    
+            <div class="course-prerequisites">
+                <h3>Prerequisites</h3>
+                <p>No prior experience is required. This course is suitable for beginners.</p>
+            </div>
+        </div>
+    
+        <!-- Display subscribed course card for JavaScript Programming -->
+        <div class="course-card" data-course-id="js">
+            <div class="course-title" onclick="toggleCourseContent('js')">JavaScript Programming</div>
+            <button class="btn btn-primary view-course-button" onclick="toggleCourseContent('js')">View Course</button>
+    
+            <!-- Additional content (initially hidden) -->
+            <div class="course-description">
+                <h3>Course Description</h3>
+                <p>This course explores JavaScript, the language of the web. Topics include:</p>
+                <ul>
+                    <li>JavaScript syntax and programming concepts</li>
+                    <li>DOM manipulation</li>
+                    <li>Asynchronous programming with promises and async/await</li>
+                    <li>Front-end and back-end development with Node.js</li>
+                </ul>
+            </div>
+    
+            <div class="course-prerequisites">
+                <h3>Prerequisites</h3>
+                <p>No prior programming experience is required. Basic knowledge of HTML and CSS is helpful.</p>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="footer">
+        &copy; 2023 DJ
+    </div>
+
+    <script>
+        function toggleCourseContent(courseType) {
+            const courseDescription = document.querySelector(`.course-card[data-course-id="${courseType}"] .course-description`);
+            const coursePrerequisites = document.querySelector(`.course-card[data-course-id="${courseType}"] .course-prerequisites`);
+            const viewButton = document.querySelector(`.course-card[data-course-id="${courseType}"] .view-course-button`);
+
+            if (courseDescription.style.display === 'none') {
+                courseDescription.style.display = 'block';
+                coursePrerequisites.style.display = 'block';
+                viewButton.textContent = 'Hide Course';
+            } else {
+                courseDescription.style.display = 'none';
+                coursePrerequisites.style.display = 'none';
+                viewButton.textContent = 'View Course';
+            }
+        }
+    </script>
+</body>
+
+</html>
